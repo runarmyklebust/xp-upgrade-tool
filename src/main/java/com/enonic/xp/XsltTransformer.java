@@ -1,8 +1,7 @@
 package com.enonic.xp;
 
 import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.URL;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -31,13 +30,13 @@ public class XsltTransformer
 
     }
 
-    public static XsltTransformer create( final Path script )
+    public static XsltTransformer create( final URL script )
     {
         final TransformerFactory tf = TransformerFactory.newInstance();
 
         try
         {
-            final Transformer transformer = tf.newTransformer( new StreamSource( Files.newInputStream( script ) ) );
+            final Transformer transformer = tf.newTransformer( new StreamSource( script.openStream() ) );
             transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "yes" );
 
             return new XsltTransformer( transformer );

@@ -5,24 +5,29 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.CharSource;
 
 class UpgradeHandler
 {
     private final Path root;
 
-    private final Path outputRoot;
+    private final static String TARGET = "upgraded";
 
     private final List<UpgradeModel> upgradeModels;
 
-    public UpgradeHandler( final Path root, final Path outputRoot )
+    private UpgradeHandler( Builder builder )
     {
-        this.root = root;
-        this.outputRoot = outputRoot;
-        this.upgradeModels = new UpgradeTaskLocator().getTasks();
+        root = builder.root;
+        upgradeModels = builder.upgradeModels;
     }
 
-    public void run()
+    public static Builder create()
+    {
+        return new Builder();
+    }
+
+    public void execute()
     {
         verifyRoot();
         processChildren( root );
@@ -51,12 +56,12 @@ class UpgradeHandler
             }
         }
 
-        IOHelper.write( createOutputFilePath( path ), source );
+        IOHelper.write( createTargetPath( path ), source );
     }
 
-    private Path createOutputFilePath( final Path path )
+    private Path createTargetPath( final Path path )
     {
-        return Paths.get( outputRoot.toString(), path.toString() );
+        return Paths.get( TARGET, PathHelper.subtractPath( path, root ).toString() );
     }
 
     private void verifyRoot()
@@ -69,6 +74,48 @@ class UpgradeHandler
         if ( !Files.isDirectory( root ) )
         {
             throw new UpgradeException( "Upgrade root is not directory" );
+        }
+    }
+
+    public static final class Builder
+    {
+        private Path root;
+
+        private Path outputRoot;
+
+        private List<UpgradeModel> upgradeModels;
+
+        private Builder()
+        {
+        }
+
+        public Builder sourceRoot( Path root )
+        {
+            this.root = root;
+            return this;
+        }
+
+        public Builder outputRoot( Path outputRoot )
+        {
+            this.outputRoot = outputRoot;
+            return this;
+        }
+
+        public Builder upgradeModels( List<UpgradeModel> upgradeModels )
+        {
+            this.upgradeModels = upgradeModels;
+            return this;
+        }
+
+        private void validate()
+        {
+            Preconditions.checkNotNull( this.root );
+            Preconditions.checkNotNull( this.upgradeModels );
+        }
+
+        public UpgradeHandler build()
+        {
+            return new UpgradeHandler( this );
         }
     }
 }

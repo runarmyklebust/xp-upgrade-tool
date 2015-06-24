@@ -1,5 +1,6 @@
 package com.enonic.xp.models;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -20,12 +21,10 @@ abstract class AbstractXsltUpgradeModel
         this.transformer = XsltTransformer.create( getResource( xsl ) );
     }
 
-    private Path getResource( final String xsl )
+    private URL getResource( final String xsl )
     {
 
-        Resources.getResource(UpgradeModel002.class, xsl );
-
-        return Paths.get( UpgradeModel002.class.getResource( xsl ).getPath() );
+        return Resources.getResource( UpgradeModel002.class, xsl );
     }
 
     String transform( final Path path, final CharSource source )

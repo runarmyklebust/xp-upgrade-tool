@@ -9,13 +9,12 @@ class UpgradeTool
 
     public static void main( String... args )
     {
-        if ( args.length < 2 )
+        if ( args.length != 1 )
         {
-            throw new UpgradeException( "Expected 2 parameters" );
+            throw new UpgradeException( "source-path must be provided" );
         }
 
         final File sourceRoot = new File( args[0] );
-        final File targetRoot = new File( args[1] );
 
         if ( !sourceRoot.exists() )
         {
@@ -27,10 +26,11 @@ class UpgradeTool
             System.out.println( arg );
         }
 
-        final UpgradeHandler upgradeHandler = new UpgradeHandler( sourceRoot.toPath(), targetRoot.toPath() );
-        upgradeHandler.run();
-
-
+        UpgradeHandler.create().
+            sourceRoot( sourceRoot.toPath() ).
+            upgradeModels( new UpgradeTaskLocator().getTasks() ).
+            build().
+            execute();
     }
 
 
