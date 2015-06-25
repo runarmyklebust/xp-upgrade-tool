@@ -12,6 +12,11 @@ import com.google.common.collect.Lists;
 
 public class PathHelper
 {
+    static final String getLastElement( final Path path )
+    {
+        return resolvePathElements( path ).getLast();
+    }
+
     static LinkedList<String> resolvePathElements( final Path path )
     {
         final LinkedList<String> elements = Lists.newLinkedList();

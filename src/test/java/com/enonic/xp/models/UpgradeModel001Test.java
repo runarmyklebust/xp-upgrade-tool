@@ -4,14 +4,6 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.CharSource;
-import com.google.common.io.Resources;
-
-import com.enonic.xp.xml.DomHelper;
-
-import static org.junit.Assert.*;
-
 public class UpgradeModel001Test
     extends AbstractUpgradeModelTest
 {

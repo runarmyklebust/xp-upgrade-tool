@@ -28,7 +28,7 @@ class UpgradeTool
 
         UpgradeHandler.create().
             sourceRoot( sourceRoot.toPath() ).
-            upgradeModels( new UpgradeTaskLocator().getTasks() ).
+            upgradeModels( new UpgradeTaskLocator() ).
             build().
             execute();
     }

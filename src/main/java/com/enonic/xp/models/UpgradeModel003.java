@@ -5,14 +5,14 @@ import java.nio.file.Paths;
 
 import com.google.common.io.CharSource;
 
-public class UpgradeModel001
+public class UpgradeModel003
     extends AbstractXsltUpgradeModel
 {
     private final static String SUPPORTED_REPO = "cms-repo";
 
-    public UpgradeModel001()
+    public UpgradeModel003()
     {
-        super( "Replace input-types 'html_part' with 'string'", "UpgradeModel001.xsl" );
+        super( "Replace moduleConfig with siteConfig", "UpgradeModel003.xsl" );
     }
 
     @Override
@@ -21,11 +21,9 @@ public class UpgradeModel001
         return path.endsWith( Paths.get( "_", "node.xml" ) ) && SUPPORTED_REPO.equals( repositoryName );
     }
 
-
     @Override
     public String upgrade( final Path path, final CharSource source )
     {
         return this.transform( path, source );
     }
-
 }

@@ -9,17 +9,18 @@ import com.enonic.xp.models.UpgradeModel002;
 
 final class UpgradeTaskLocator
 {
-    private final List<UpgradeModel> tasks;
+    private final List<UpgradeModel> upgradeModels;
 
     public UpgradeTaskLocator()
     {
-        this.tasks = Lists.newArrayList();
-        this.tasks.add( new UpgradeModel001() );
-        this.tasks.add( new UpgradeModel002() );
+        this.upgradeModels = Lists.newArrayList();
+        this.upgradeModels.add( new UpgradeModel001() );
+        this.upgradeModels.add( new UpgradeModel002() );
     }
 
-    public List<UpgradeModel> getTasks()
+    public List<UpgradeModel> getUpgradeModels()
     {
-        return tasks;
+        return upgradeModels;
     }
+
 }

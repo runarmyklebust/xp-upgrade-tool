@@ -8,15 +8,17 @@ import com.google.common.io.CharSource;
 public class UpgradeModel002
     extends AbstractXsltUpgradeModel
 {
+    private final static String SUPPORTED_REPO = "cms-repo";
+
     public UpgradeModel002()
     {
         super( "Replace image-content property-names", "UpgradeModel002.xsl" );
     }
 
     @Override
-    public boolean supports( final Path path )
+    public boolean supports( final Path path, final String repositoryName, final String branchName )
     {
-        return path.endsWith( Paths.get( "_", "node.xml" ) );
+        return path.endsWith( Paths.get( "_", "node.xml" ) ) && SUPPORTED_REPO.equals( repositoryName );
     }
 
     @Override

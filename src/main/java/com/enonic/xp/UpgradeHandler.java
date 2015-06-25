@@ -2,11 +2,9 @@ package com.enonic.xp;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.CharSource;
 
 class UpgradeHandler
 {
@@ -14,12 +12,14 @@ class UpgradeHandler
 
     private final static String TARGET = "upgraded";
 
-    private final List<UpgradeModel> upgradeModels;
+    private final UpgradeTaskLocator upgradeTaskLocator;
+
+    private final Logger LOG = Logger.getLogger( UpgradeHandler.class.getName() );
 
     private UpgradeHandler( Builder builder )
     {
         root = builder.root;
-        upgradeModels = builder.upgradeModels;
+        upgradeTaskLocator = builder.upgradeTaskLocator;
     }
 
     public static Builder create()
@@ -30,38 +30,15 @@ class UpgradeHandler
     public void execute()
     {
         verifyRoot();
-        processChildren( root );
-    }
 
-    private void processChildren( final Path path )
-    {
-        if ( Files.isDirectory( path ) )
-        {
-            IOHelper.getChildren( path ).forEach( this::processChildren );
-        }
-        else
-        {
-            processFile( path, IOHelper.getCharSource( path ) );
-        }
-    }
+        LOG.info( "Starting upgrade..." );
 
-    private void processFile( final Path path, CharSource source )
-    {
-        for ( final UpgradeModel upgradeModel : upgradeModels )
-        {
-            if ( upgradeModel.supports( path ) )
-            {
-                final String upgraded = upgradeModel.upgrade( path, source );
-                source = CharSource.wrap( upgraded );
-            }
-        }
-
-        IOHelper.write( createTargetPath( path ), source );
-    }
-
-    private Path createTargetPath( final Path path )
-    {
-        return Paths.get( TARGET, PathHelper.subtractPath( path, root ).toString() );
+        HandleRepoNodes.create().
+            sourceRoot( root ).
+            upgradeModels( this.upgradeTaskLocator.getUpgradeModels() ).
+            target( TARGET ).
+            build().
+            execute();
     }
 
     private void verifyRoot()
@@ -81,9 +58,7 @@ class UpgradeHandler
     {
         private Path root;
 
-        private Path outputRoot;
-
-        private List<UpgradeModel> upgradeModels;
+        private UpgradeTaskLocator upgradeTaskLocator;
 
         private Builder()
         {
@@ -95,26 +70,21 @@ class UpgradeHandler
             return this;
         }
 
-        public Builder outputRoot( Path outputRoot )
+        public Builder upgradeModels( final UpgradeTaskLocator upgradeTaskLocator )
         {
-            this.outputRoot = outputRoot;
-            return this;
-        }
-
-        public Builder upgradeModels( List<UpgradeModel> upgradeModels )
-        {
-            this.upgradeModels = upgradeModels;
+            this.upgradeTaskLocator = upgradeTaskLocator;
             return this;
         }
 
         private void validate()
         {
             Preconditions.checkNotNull( this.root );
-            Preconditions.checkNotNull( this.upgradeModels );
+            Preconditions.checkNotNull( this.upgradeTaskLocator );
         }
 
         public UpgradeHandler build()
         {
+            this.validate();
             return new UpgradeHandler( this );
         }
     }

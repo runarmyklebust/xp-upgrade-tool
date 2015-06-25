@@ -2,7 +2,6 @@ package com.enonic.xp.models;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.google.common.io.CharSource;
 import com.google.common.io.Resources;
