@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 
 import com.google.common.io.CharSource;
 
+/**
+ * Replace moduleConfig with siteConfig
+ */
 public class UpgradeModel003
     extends AbstractXsltUpgradeModel
 {
@@ -12,7 +15,7 @@ public class UpgradeModel003
 
     public UpgradeModel003()
     {
-        super( "Replace moduleConfig with siteConfig", "UpgradeModel003.xsl" );
+        super( "UpgradeModel003.xsl" );
     }
 
     @Override

@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 
 import com.google.common.io.CharSource;
 
+/**
+ * Replace image-content property-names
+ */
 public class UpgradeModel002
     extends AbstractXsltUpgradeModel
 {
@@ -12,7 +15,7 @@ public class UpgradeModel002
 
     public UpgradeModel002()
     {
-        super( "Replace image-content property-names", "UpgradeModel002.xsl" );
+        super( "UpgradeModel002.xsl" );
     }
 
     @Override

@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 
 import com.google.common.io.CharSource;
 
+/**
+ * Replace input-types 'html_part' with 'string'
+ */
 public class UpgradeModel001
     extends AbstractXsltUpgradeModel
 {
@@ -12,7 +15,7 @@ public class UpgradeModel001
 
     public UpgradeModel001()
     {
-        super( "Replace input-types 'html_part' with 'string'", "UpgradeModel001.xsl" );
+        super( "UpgradeModel001.xsl" );
     }
 
     @Override
@@ -25,6 +28,7 @@ public class UpgradeModel001
     @Override
     public String upgrade( final Path path, final CharSource source )
     {
+
         return this.transform( path, source );
     }
 

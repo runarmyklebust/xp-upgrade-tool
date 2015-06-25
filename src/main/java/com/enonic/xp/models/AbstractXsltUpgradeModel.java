@@ -14,9 +14,8 @@ abstract class AbstractXsltUpgradeModel
 {
     private final XsltTransformer transformer;
 
-    AbstractXsltUpgradeModel( final String descr, final String xsl )
+    AbstractXsltUpgradeModel( final String xsl )
     {
-        super( descr );
         this.transformer = XsltTransformer.create( getResource( xsl ) );
     }
 

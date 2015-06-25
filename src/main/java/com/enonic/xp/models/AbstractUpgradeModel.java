@@ -7,14 +7,12 @@ import com.enonic.xp.UpgradeModel;
 abstract class AbstractUpgradeModel
     implements UpgradeModel
 {
-
     private static final Logger LOG = Logger.getLogger( "upgrade" );
 
-    AbstractUpgradeModel( final String descr )
+
+    protected void log( final String message )
     {
-        LOG.info( "--------------------------------" );
-        LOG.info( "descr" );
-        LOG.info( "--------------------------------" );
+        LOG.info( message );
     }
 
 
