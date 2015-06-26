@@ -4,14 +4,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.CharSource;
 
 public class HandleRepoNodes
 {
+    private final static ImmutableSet<String> IGNORE_FILES = ImmutableSet.of( ".DS_Store" );
+
+    private static final Predicate<Path> IGNORE_FILES_FILTER = ( repo ) -> !IGNORE_FILES.contains( repo.getFileName().toString() );
+
     private final Path root;
 
     private final String target;
@@ -47,7 +53,7 @@ public class HandleRepoNodes
             throw new UpgradeException( "Expected repositories directory, found '" + path + "'" );
         }
 
-        final Stream<Path> repositories = IOHelper.getChildren( path );
+        final Stream<Path> repositories = IOHelper.getChildren( path ).filter( IGNORE_FILES_FILTER );
 
         repositories.forEach( this::processRepository );
     }
@@ -63,7 +69,7 @@ public class HandleRepoNodes
             throw new UpgradeException( "Expected repository directory, found '" + repository + "'" );
         }
 
-        final Stream<Path> branches = IOHelper.getChildren( repository );
+        final Stream<Path> branches = IOHelper.getChildren( repository ).filter( IGNORE_FILES_FILTER );
 
         branches.forEach( ( branch ) -> this.processBranch( branch, repoName ) );
     }
