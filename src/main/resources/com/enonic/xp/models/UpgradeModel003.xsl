@@ -2,7 +2,8 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:template match="/node/data/property-set[@name='data' and ..//string[@name='type']= 'portal:site']/property-set/@name">
+  <xsl:template
+      match="/node/data/property-set[@name='data' and ..//string[@name='type']= 'portal:site']/property-set[@name='moduleConfig']/@name">
     <xsl:attribute name="name">
       <xsl:value-of select="'siteConfig'"/>
     </xsl:attribute>

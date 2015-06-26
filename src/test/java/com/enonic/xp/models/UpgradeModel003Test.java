@@ -33,5 +33,16 @@ public class UpgradeModel003Test
 
     }
 
+    @Test
+    public void rename_multiple_moduleConfig_to_siteConfig()
+        throws Exception
+    {
+        final UpgradeModel003 upgradeModel = new UpgradeModel003();
+
+        final String upgraded = upgradeModel.upgrade( Paths.get( "/test" ), getSource( "upgrademodel003_multi_modules.xml" ) );
+
+        assertResult( upgraded, "upgrademodel003_multi_modules_result.xml" );
+
+    }
 
 }
